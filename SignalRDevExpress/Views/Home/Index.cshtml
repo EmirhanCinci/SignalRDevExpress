@@ -1,0 +1,59 @@
+﻿@using DevExtreme.AspNet.Mvc
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="chart-demo">
+    @(Html.DevExtreme().Chart()
+        .ID("line-chart")
+        .Palette(VizPalette.Violet)
+        .CommonSeriesSettings(s => s
+            .ArgumentField("SaleDate")
+            .Type(SeriesType.Line)
+        )
+        .Margin(m => m.Bottom(20))
+        .ArgumentAxis(a => a
+            .ValueMarginsEnabled(false)
+            .DiscreteAxisDivisionMode(DiscreteAxisDivisionMode.CrossLabels)
+            .Grid(g => g.Visible(true))
+        )
+        .Series(s => {
+            s.Add().ValueField("Kalem").Name("Kalem");
+            s.Add().ValueField("Silgi").Name("Silgi");
+            s.Add().ValueField("Defter").Name("Defter");
+            s.Add().ValueField("Kitap").Name("Kitap");
+            s.Add().ValueField("Kağıt").Name("Kağıt");
+        })
+        .Legend(l => l
+            .VerticalAlignment(VerticalEdge.Bottom)
+            .HorizontalAlignment(HorizontalAlignment.Center)
+            .ItemTextPosition(Position.Bottom)
+        )
+        .Title(t => t
+            .Text("Toplam Satış Miktarları")
+            .Subtitle(s => s.Text("(10 Günlük 5 Ürünün Satış Miktarları)"))
+        )
+        .Export(e => e.Enabled(true))
+        .Tooltip(t => t.Enabled(true))
+    )
+</div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+<script>
+    $(document).ready(() => {
+        var saleChartList = new Array();
+        saleChartList.push(["Tarih", "Kalem", "Silgi", "Defter", "Kitap", "Kağıt"]);
+        var chart = $("#line-chart").dxChart("instance");
+        var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7089/SaleHub").build();
+        connection.start().then(() => {
+            connection.invoke("GetSaleList");
+        });
+        connection.on("ReceiveSaleList", (saleList) => {
+            saleChartList = saleChartList.splice(0, 1);
+            saleList.forEach((item) => {
+                saleChartList.push({ "SaleDate": item.saleDate, "Kalem": item.prices[0], "Silgi": item.prices[1], "Defter": item.prices[2], "Kitap": item.prices[3], "Kağıt": item.prices[4] })
+            });
+            chart.option("dataSource", saleChartList);
+        });
+    });
+</script>

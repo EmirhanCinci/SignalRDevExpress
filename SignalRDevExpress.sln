@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDevExpress", "SignalRDevExpress\SignalRDevExpress.csproj", "{274D278B-94EF-4BF9-AB5D-0886DFAB400C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevExtreme NuGet.config", "DevExtreme NuGet.config", "{6CCEFB6D-179E-476D-91CD-F9268C5B9FA2}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.config = NuGet.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{274D278B-94EF-4BF9-AB5D-0886DFAB400C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{274D278B-94EF-4BF9-AB5D-0886DFAB400C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{274D278B-94EF-4BF9-AB5D-0886DFAB400C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{274D278B-94EF-4BF9-AB5D-0886DFAB400C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {77FCAB26-7644-4047-9F00-17A2AF662F58}
+	EndGlobalSection
+EndGlobal
