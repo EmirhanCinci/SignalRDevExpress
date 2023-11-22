@@ -1,0 +1,55 @@
+﻿@using DevExtreme.AspNet.Mvc
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@(Html.DevExtreme().DataGrid()
+    .ID("gridContainer")
+    .Visible(false)
+    .ShowBorders(true)
+    .RepaintChangesOnly(true)
+    .HighlightChanges(true)
+    .Columns(columns =>
+    {
+        columns.Add().DataField("SaleDate");
+
+        columns.Add().DataField("Kitap");
+
+        columns.Add().DataField("Kalem");
+
+        columns.Add().DataField("Silgi");
+
+        columns.Add().DataField("Defter");
+
+        columns.Add().DataField("Kağıt");
+    })
+)
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7089/SaleHub").build();
+    $(function () {
+        connection.start().then(function () {
+            var store = new DevExpress.data.CustomStore({
+                load: function () {
+                    return connection.invoke("GetSaleList");
+                }
+            });
+            $("#gridContainer").dxDataGrid({
+                dataSource: store,
+                visible: true,
+                columns: [
+                    { dataField: 'saleDate', caption: 'Tarih' },
+                    { dataField: 'prices[0]', caption: 'Kalem' },
+                    { dataField: 'prices[1]', caption: 'Silgi' },
+                    { dataField: 'prices[2]', caption: 'Defter' },
+                    { dataField: 'prices[3]', caption: 'Kitap' },
+                    { dataField: 'prices[4]', caption: 'Kağıt' }
+                ]
+            });
+            connection.on("ReceiveSaleList", function (data) {
+                store.load();
+            });
+        });
+    });
+</script>

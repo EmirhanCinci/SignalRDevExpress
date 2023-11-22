@@ -8,5 +8,10 @@ namespace SignalRDevExpress.Controllers
         {
             return View();
         }
+
+        public IActionResult Table()
+        {
+            return View();
+        }
     }
 }
