@@ -1,9 +1,10 @@
 ﻿@using DevExtreme.AspNet.Mvc
+@using SignalRDevExpress.Models
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@(Html.DevExtreme().DataGrid()
+@(Html.DevExtreme().DataGrid<SaleChart>()
     .ID("gridContainer")
     .Visible(false)
     .ShowBorders(true)
@@ -30,26 +31,23 @@
     var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7089/SaleHub").build();
     $(function () {
         connection.start().then(function () {
-            var store = new DevExpress.data.CustomStore({
-                load: function () {
-                    return connection.invoke("GetSaleList");
-                }
-            });
-            $("#gridContainer").dxDataGrid({
-                dataSource: store,
-                visible: true,
-                columns: [
-                    { dataField: 'saleDate', caption: 'Tarih' },
-                    { dataField: 'prices[0]', caption: 'Kalem' },
-                    { dataField: 'prices[1]', caption: 'Silgi' },
-                    { dataField: 'prices[2]', caption: 'Defter' },
-                    { dataField: 'prices[3]', caption: 'Kitap' },
-                    { dataField: 'prices[4]', caption: 'Kağıt' }
-                ]
-            });
-            connection.on("ReceiveSaleList", function (data) {
-                store.load();
-            });
+            connection.invoke("GetSaleList");
+        });
+
+        $("#gridContainer").dxDataGrid({
+            visible: true,
+            columns: [
+                { dataField: 'saleDate', caption: 'Tarih' },
+                { dataField: 'prices[0]', caption: 'Kalem' },
+                { dataField: 'prices[1]', caption: 'Silgi' },
+                { dataField: 'prices[2]', caption: 'Defter' },
+                { dataField: 'prices[3]', caption: 'Kitap' },
+                { dataField: 'prices[4]', caption: 'Kağıt' }
+            ] 
+        });
+
+        connection.on("ReceiveSaleList", function (data) {
+            $("#gridContainer").dxDataGrid("instance").option("dataSource", data);
         });
     });
 </script>
